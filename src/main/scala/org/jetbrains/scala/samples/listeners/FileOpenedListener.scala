@@ -41,5 +41,14 @@ class FileOpenedListener extends FileEditorManagerListener {
         val firstChildText = Option(psiFile.getFirstChild).map(_.getText).getOrElse("<none>")
         logger.info(s"First child text: $firstChildText")
 
+        // get psiElement where, but the code below errors if 100 is not a valid offset (the document is too short)
+//        val aReference = Option(psiFile.findReferenceAt(100)).map(_.getElement.getText).getOrElse("<none>")
+//        logger.info(s"Reference: $aReference")
+
+        // get all references? (doesn't work)
+        psiFile.getReferences.foreach { ref =>
+            logger.info(s"Reference: ${ref.getCanonicalText}")
+        }
+
     }
 }
