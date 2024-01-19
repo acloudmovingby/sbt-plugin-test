@@ -10,13 +10,13 @@ import com.intellij.util.ProcessingContext
 
 class SimpleCompletionContributor() extends CompletionContributor {
 
-  extend(
-    CompletionType.BASIC,
-    PlatformPatterns.psiElement(VALUE_CHARACTERS),
-    new CompletionProvider[CompletionParameters]() {
-      override def addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet): Unit =
-        result.addElement(LookupElementBuilder.create("HELLO"))
-    }
-  )
+    extend(
+        CompletionType.BASIC,
+        PlatformPatterns.psiElement(VALUE_CHARACTERS),
+        new CompletionProvider[CompletionParameters]() {
+            override def addCompletions(parameters: CompletionParameters, context: ProcessingContext, result: CompletionResultSet): Unit =
+                result.addElement(LookupElementBuilder.create("HELLO"))
+        }
+    )
 
 }

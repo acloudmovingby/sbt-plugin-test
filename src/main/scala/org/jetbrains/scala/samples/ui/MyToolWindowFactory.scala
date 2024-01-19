@@ -9,7 +9,7 @@ import org.jetbrains.scala.samples.SamplePluginBundle
 
 class MyToolWindowFactory extends ToolWindowFactory {
 
-  override def createToolWindowContent(project: Project, toolWindow: ToolWindow): Unit =
-    toolWindow.getComponent.add(new JBLabel(SamplePluginBundle.message("my.cool.tool.window")))
+    override def createToolWindowContent(project: Project, toolWindow: ToolWindow): Unit =
+        toolWindow.getComponent.add(new JBLabel(SamplePluginBundle.message("my.cool.tool.window")))
 
 }

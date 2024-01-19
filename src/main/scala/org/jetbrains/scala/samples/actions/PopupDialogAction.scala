@@ -15,38 +15,39 @@ import javax.swing._
 
 class PopupDialogAction extends AnAction() {
 
-  /**
-   * Gives the user feedback when the dynamic action menu is chosen.
-   * Pops a simple message dialog.
-   * @param event Event received when the associated menu item is chosen.
-   */
-  override def actionPerformed(event: AnActionEvent): Unit = { // Using the event, create and show a dialog
-    val currentProject = event.getProject
-    val dlgMsg = new StringBuilder(SamplePluginBundle.message("gettext.selected", event.getPresentation.getText) + '\n')
-    val dlgTitle = event.getPresentation.getDescription
+    /**
+     * Gives the user feedback when the dynamic action menu is chosen.
+     * Pops a simple message dialog.
+     *
+     * @param event Event received when the associated menu item is chosen.
+     */
+    override def actionPerformed(event: AnActionEvent): Unit = { // Using the event, create and show a dialog
+        val currentProject = event.getProject
+        val dlgMsg = new StringBuilder(SamplePluginBundle.message("gettext.selected", event.getPresentation.getText) + '\n')
+        val dlgTitle = event.getPresentation.getDescription
 
-    // If an element is selected in the editor, add info about it.
-    val nav = event.getData(CommonDataKeys.NAVIGATABLE)
-    if (nav != null)
-      dlgMsg.append(SamplePluginBundle.message("selected.element.tostring", nav.toString) + '\n')
+        // If an element is selected in the editor, add info about it.
+        val nav = event.getData(CommonDataKeys.NAVIGATABLE)
+        if (nav != null)
+            dlgMsg.append(SamplePluginBundle.message("selected.element.tostring", nav.toString) + '\n')
 
-    val appHelloMessage = ApplicationHelloService.getInstance.getApplicationHelloInfo
-    dlgMsg.append(appHelloMessage + '\n')
+        val appHelloMessage = ApplicationHelloService.getInstance.getApplicationHelloInfo
+        dlgMsg.append(appHelloMessage + '\n')
 
-    val projectMessage = ProjectHelloService.getInstance(currentProject).getProjectHelloInfo
-    dlgMsg.append(projectMessage + '\n')
+        val projectMessage = ProjectHelloService.getInstance(currentProject).getProjectHelloInfo
+        dlgMsg.append(projectMessage + '\n')
 
-    Messages.showMessageDialog(currentProject, dlgMsg.toString, dlgTitle, Messages.getInformationIcon)
-  }
+        Messages.showMessageDialog(currentProject, dlgMsg.toString, dlgTitle, Messages.getInformationIcon)
+    }
 
-  /**
-   * Determines whether this menu item is available for the current context.
-   * Requires a project to be open.
-   *
-   * @param e Event received when the associated group-id menu is chosen.
-   */
-  override def update(e: AnActionEvent): Unit = { // Set the availability based on whether a project is open
-    val project = e.getProject
-    e.getPresentation.setEnabledAndVisible(project != null)
-  }
+    /**
+     * Determines whether this menu item is available for the current context.
+     * Requires a project to be open.
+     *
+     * @param e Event received when the associated group-id menu is chosen.
+     */
+    override def update(e: AnActionEvent): Unit = { // Set the availability based on whether a project is open
+        val project = e.getProject
+        e.getPresentation.setEnabledAndVisible(project != null)
+    }
 }

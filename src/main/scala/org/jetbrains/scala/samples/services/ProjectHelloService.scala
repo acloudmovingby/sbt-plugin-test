@@ -9,11 +9,11 @@ import org.jetbrains.scala.samples.SamplePluginBundle
 
 @Service
 final class ProjectHelloService(project: Project) {
-  def getProjectHelloInfo: String =
-    SamplePluginBundle.message("hello.from.project.getname", project.getName)
+    def getProjectHelloInfo: String =
+        SamplePluginBundle.message("hello.from.project.getname", project.getName)
 }
 
 object ProjectHelloService {
-  def getInstance(@NotNull project: Project): ProjectHelloService =
-    project.getService(classOf[ProjectHelloService])
+    def getInstance(@NotNull project: Project): ProjectHelloService =
+        project.getService(classOf[ProjectHelloService])
 }
