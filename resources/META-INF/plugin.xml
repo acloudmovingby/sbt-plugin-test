@@ -1,8 +1,8 @@
 <idea-plugin>
     <id>me.and.co.my.awesome.framework</id>
-    <name>My Awesome Framework</name>
+    <name>Graphit</name>
     <version>0.0.1-SNAPSHOT</version>
-    <vendor>Me and Co</vendor>
+    <vendor>Chris Oates</vendor>
 
     <description>A new plugin for IntelliJ platform written in Scala and built with SBT</description>
 
@@ -27,6 +27,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="My Plugin Notification" />
         <toolWindow factoryClass="org.jetbrains.scala.samples.ui.MyToolWindowFactory" id="MyToolWindow" anchor="bottom"/>
+        <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup displayType="BALLOON" id="Chris Plugin Notification" />
+        <toolWindow factoryClass="org.jetbrains.scala.samples.ui.ChrisToolWindowFactory" id="ChrisFoolWindow" anchor="right"/>
         <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
     </extensions>
 
