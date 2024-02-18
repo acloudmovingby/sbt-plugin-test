@@ -2,6 +2,7 @@
 
 package org.jetbrains.scala.samples.ui
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.{ToolWindow, ToolWindowFactory}
@@ -10,12 +11,17 @@ import org.jetbrains.scala.samples.SamplePluginBundle
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.CaretListener
 import org.jetbrains.scala.samples.listeners.CaretChangeListener
+import org.jetbrains.scala.samples.services.CatViewerWindowService
 
 class ChrisToolWindowFactory extends ToolWindowFactory {
 
     val logger: Logger = Logger.getFactory.getLoggerInstance(getClass.getName)
 
     override def createToolWindowContent(project: Project, toolWindow: ToolWindow): Unit = {
+
+//        val catViewerWindow = ServiceManager.getService(project, classOf[CatViewerWindowService]).catViewerWindow
+//        val component = toolWindow.getComponent
+//        component.getParent.add(catViewerWindow.content)
 
         val theText = for {
             proj <- Option(project)
