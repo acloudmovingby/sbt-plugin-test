@@ -24,9 +24,9 @@
         <listener class="org.jetbrains.scala.samples.listeners.FileOpenedListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
 
-    <applicationListeners>
+    <projectListeners>
         <listener class="org.jetbrains.scala.samples.listeners.CaretChangeListener" topic="com.intellij.openapi.editor.event.CaretListener"/>
-    </applicationListeners>
+    </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="My Plugin Notification" />

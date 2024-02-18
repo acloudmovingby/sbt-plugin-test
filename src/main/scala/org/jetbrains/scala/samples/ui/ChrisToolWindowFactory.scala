@@ -8,6 +8,8 @@ import com.intellij.openapi.wm.{ToolWindow, ToolWindowFactory}
 import com.intellij.ui.components.JBLabel
 import org.jetbrains.scala.samples.SamplePluginBundle
 import com.intellij.openapi.diagnostic.Logger
+import com.intellij.openapi.editor.event.CaretListener
+import org.jetbrains.scala.samples.listeners.CaretChangeListener
 
 class ChrisToolWindowFactory extends ToolWindowFactory {
 
@@ -24,10 +26,21 @@ class ChrisToolWindowFactory extends ToolWindowFactory {
         } yield txt
 
         toolWindow.getComponent.add(new JBLabel(s"Hey ${theText.getOrElse("<empty>")}"))
+        toolWindow.getContentManagerIfCreated.addContent(
+            toolWindow.getContentManagerIfCreated.getFactory.createContent(new JBLabel("Jude"), "It's me", false)
+        )
 
         logger.info("This is a message!!")
 
-        //toolWindow.getComponent.add(new JBLabel(SamplePluginBundle.message("chris.tool.window")))
+        for {
+            proj <- Option(project)
+            instance <- Option(FileEditorManager.getInstance(proj))
+            editor <- Option(instance.getSelectedTextEditor())
+            caretModel = editor.getCaretModel()
+        } yield {
+            logger.info("Making new caret listener")
+            caretModel.addCaretListener(new CaretChangeListener())
+        }
     }
 
 }
