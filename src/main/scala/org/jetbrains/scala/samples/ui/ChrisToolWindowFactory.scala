@@ -2,7 +2,8 @@
 
 package org.jetbrains.scala.samples.ui
 
-import com.intellij.openapi.components.ServiceManager
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.{ComponentManager, ServiceManager}
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.{ToolWindow, ToolWindowFactory}
@@ -19,9 +20,11 @@ class ChrisToolWindowFactory extends ToolWindowFactory {
 
     override def createToolWindowContent(project: Project, toolWindow: ToolWindow): Unit = {
 
-//        val catViewerWindow = ServiceManager.getService(project, classOf[CatViewerWindowService]).catViewerWindow
-//        val component = toolWindow.getComponent
-//        component.getParent.add(catViewerWindow.content)
+        val catViewerWindow = project.getService(classOf[CatViewerWindowService]).catViewerWindow
+        //val catViewerWindow = ApplicationManager.getApplication().getService(classOf[CatViewerWindowService]).catViewerWindow
+        val _catViewerWindow = ServiceManager.getService(project, classOf[CatViewerWindowService]).catViewerWindow
+        val component = toolWindow.getComponent
+        component.getParent.add(catViewerWindow.content)
 
         val theText = for {
             proj <- Option(project)

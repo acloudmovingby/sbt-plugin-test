@@ -38,7 +38,7 @@
         <notificationGroup displayType="BALLOON" id="Chris Plugin Notification" />
         <toolWindow factoryClass="org.jetbrains.scala.samples.ui.ChrisToolWindowFactory" id="ChrisFoolWindow" anchor="right"/>
         <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
-        <projectService id="CatViewerWindowService" serviceImplementation="org.jetbrains.scala.samples.services"/>
+        <projectService id="CatViewerWindowService" serviceImplementation="org.jetbrains.scala.samples.services.CatViewerWindowService"/>
     </extensions>
 
 </idea-plugin>
