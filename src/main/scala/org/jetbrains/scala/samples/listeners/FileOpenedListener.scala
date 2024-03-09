@@ -27,28 +27,8 @@ class FileOpenedListener extends FileEditorManagerListener {
     }
 
     override def selectionChanged(event: FileEditorManagerEvent): Unit = {
-        val oldFileName = Option(event.getOldFile).map(_.getName).getOrElse("<none>")
-        val newFileName = Option(event.getNewFile).map(_.getName).getOrElse("<none>")
-        logger.info(s"Selection changed, oldFile=$oldFileName, newFile=$newFileName")
-
-        // use for updating the tool window??
-        val toolWindow: ToolWindow = ToolWindowManager.getInstance(event.getManager.getProject).getToolWindow("ChrisFoolWindow")
-
-
-        val project: Project = event.getManager.getProject
-        val currentDoc = FileEditorManager.getInstance(project).getSelectedTextEditor().getDocument()
-        val psiFile: PsiFile = PsiDocumentManager.getInstance(project).getPsiFile(currentDoc)
-        val firstChildText = Option(psiFile.getFirstChild).map(_.getText).getOrElse("<none>")
-        logger.info(s"First child text: $firstChildText")
-
-        // get psiElement where, but the code below errors if 100 is not a valid offset (the document is too short)
-//        val aReference = Option(psiFile.findReferenceAt(100)).map(_.getElement.getText).getOrElse("<none>")
-//        logger.info(s"Reference: $aReference")
-
-        // get all references? (doesn't work)
-        psiFile.getReferences.foreach { ref =>
-            logger.info(s"Reference: ${ref.getCanonicalText}")
-        }
-
+//        val oldFileName = Option(event.getOldFile).map(_.getName).getOrElse("<none>")
+//        val newFileName = Option(event.getNewFile).map(_.getName).getOrElse("<none>")
+//        logger.info(s"Selection changed, oldFile=$oldFileName, newFile=$newFileName")
     }
 }

@@ -82,6 +82,7 @@ case class OpenedConnection(connection: URLConnection)
                 case x if x.contains("js") =>
                     cefResponse.setMimeType("text/javascript")
                 case x if x.contains("html") => cefResponse.setMimeType("text/html")
+                case x if x.contains("svg") => cefResponse.setMimeType("image/svg+xml")
                 case _ => cefResponse.setMimeType(connection.getContentType)
             }
             responseLength.set(inputStream.available())

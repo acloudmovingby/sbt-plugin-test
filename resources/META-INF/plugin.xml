@@ -8,6 +8,7 @@
 
     <idea-version since-build="231.0"/>
 
+    <!--<depends>org.intellij.scala</depends>-->
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.properties</depends>
 
@@ -25,7 +26,6 @@
     </applicationListeners>
 
     <projectListeners>
-        <listener class="org.jetbrains.scala.samples.listeners.CaretChangeListener" topic="com.intellij.openapi.editor.event.CaretListener"/>
     </projectListeners>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -39,6 +39,8 @@
         <toolWindow factoryClass="org.jetbrains.scala.samples.ui.ChrisToolWindowFactory" id="ChrisFoolWindow" anchor="right"/>
         <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
         <projectService id="CatViewerWindowService" serviceImplementation="org.jetbrains.scala.samples.services.CatViewerWindowService"/>
+        <editorFactoryMouseListener implementation="org.jetbrains.scala.samples.listeners.CaretChangeListener"/>
+        <!--<lang.findUsagesProvider language="Scala" implementationClass="org.jetbrains.plugins.scala.lang.findUsages.ScalaFindUsagesProvider"/>-->
     </extensions>
 
 </idea-plugin>

@@ -11,14 +11,19 @@ import com.intellij.ui.components.JBLabel
 import org.jetbrains.scala.samples.SamplePluginBundle
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.CaretListener
+import com.intellij.psi.{PsiDocumentManager, PsiFile}
 import org.jetbrains.scala.samples.listeners.CaretChangeListener
 import org.jetbrains.scala.samples.services.CatViewerWindowService
+import org.jetbrains.scala.samples.services.ShellCommand.{dot, pwd}
 
 class ChrisToolWindowFactory extends ToolWindowFactory {
 
     val logger: Logger = Logger.getFactory.getLoggerInstance(getClass.getName)
 
     override def createToolWindowContent(project: Project, toolWindow: ToolWindow): Unit = {
+
+        println(s"dragon - result of pwd:${pwd()}")
+        println(s"dragon - result of dot:${dot()}")
 
         val catViewerWindow = project.getService(classOf[CatViewerWindowService]).catViewerWindow
         //val catViewerWindow = ApplicationManager.getApplication().getService(classOf[CatViewerWindowService]).catViewerWindow
@@ -39,16 +44,18 @@ class ChrisToolWindowFactory extends ToolWindowFactory {
             toolWindow.getContentManagerIfCreated.getFactory.createContent(new JBLabel("Jude"), "It's me", false)
         )
 
-        logger.info("This is a message!!")
-
         for {
             proj <- Option(project)
             instance <- Option(FileEditorManager.getInstance(proj))
             editor <- Option(instance.getSelectedTextEditor())
             caretModel = editor.getCaretModel()
+            document = editor.getDocument()
+            offset = caretModel.getOffset
+            psiElement <- Option(PsiDocumentManager.getInstance(project).getPsiFile(document).findElementAt(offset))
         } yield {
-            logger.info("Making new caret listener")
-            caretModel.addCaretListener(new CaretChangeListener())
+            logger.info(s"psiElement at cursor=${psiElement.getText}")
+            //logger.info("dragon - Making new caret listener")
+            //caretModel.addCaretListener(new CaretChangeListener())
         }
     }
 
