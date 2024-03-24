@@ -53,7 +53,7 @@ class ChrisToolWindowFactory extends ToolWindowFactory {
             offset = caretModel.getOffset
             psiElement <- Option(PsiDocumentManager.getInstance(project).getPsiFile(document).findElementAt(offset))
         } yield {
-            logger.info(s"psiElement at cursor=${psiElement.getText}")
+            ()
             //logger.info("dragon - Making new caret listener")
             //caretModel.addCaretListener(new CaretChangeListener())
         }
