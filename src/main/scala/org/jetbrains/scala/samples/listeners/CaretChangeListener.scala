@@ -1,9 +1,11 @@
 package org.jetbrains.scala.samples.listeners
 
+import com.intellij.lang.Language
+
 import scala.jdk.CollectionConverters._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.{EditorMouseEvent, EditorMouseListener}
-import com.intellij.psi.{PsiDocumentManager, PsiElement}
+import com.intellij.psi.{PsiDocumentManager, PsiElement, PsiFile}
 
 class CaretChangeListener extends EditorMouseListener {
 
@@ -51,6 +53,16 @@ class CaretChangeListener extends EditorMouseListener {
         .flatMap(p => Option(p.getReference))
         .flatMap(r => Option(r.resolve()))
 
+    def getScalaPsiFile(file: PsiFile): Option[PsiFile] = for {
+        fileViewProvider <- Option(file.getViewProvider)
+            languages = fileViewProvider.getLanguages.asScala
+            hasScala = languages.exists(l => l.isKindOf("Scala"))
+        psiTreeForScala <- if (!hasScala) None else {
+            Option(Language.findLanguageByID("Scala"))
+                .flatMap(l => Option(fileViewProvider.getPsi(l)))
+        }
+    } yield psiTreeForScala
+
     override def mouseClicked(event: EditorMouseEvent): Unit = {
         for {
             editor <- Option(event.getEditor)
@@ -60,25 +72,27 @@ class CaretChangeListener extends EditorMouseListener {
             offset = caretModel.getOffset
             documentManager <- Option(PsiDocumentManager.getInstance(project))
             file <- Option(documentManager.getPsiFile(document))
-            fileViewProvider = file.getViewProvider
-            languages = fileViewProvider.getLanguages.asScala
-            hasScala = languages.exists(l => l.isKindOf("Scala"))
             psiElement <- Option(file.findElementAt(offset))
         } yield {
             logger.info(s"***CURSOR CLICK***")
-            logger.info(s"${file.getName}: isScala? $hasScala")
 
+//            val psiTreeForScala = getScalaPsiFile(file)
+//            logger.info(s"Class of ScalaPsiFile: ${psiTreeForScala.foreach(_.getClass.getName)}")
 
             // this is useful for seeing the grandparent/parent/child of the element I clicked on and seeing which have references
+            /*
             logFamilyOfElement(psiElement)
+            */
 
             // The parent of where you click actually has the reference, so this code follows the parent's reference and displays its children
             // in other words it shows the elements in the function definition of the method you clicked on
-//            logger.info(s"Children of parent's reference:")
-//            parentsReferenceResolved(psiElement).foreach { parent =>
-//                logger.info(s"${parent.getText}:")
-//                logAllChildrenTypes(parent)
-//            }
+            /*
+            logger.info(s"Children of parent's reference:")
+            parentsReferenceResolved(psiElement).foreach { parent =>
+                logger.info(s"${parent.getText}:")
+                logAllChildrenTypes(parent)
+            }
+            */
         }
     }
 
