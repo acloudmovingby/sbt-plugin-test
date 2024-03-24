@@ -1,5 +1,6 @@
 package org.jetbrains.scala.samples.listeners
 
+import scala.jdk.CollectionConverters._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.{EditorMouseEvent, EditorMouseListener}
 import com.intellij.psi.{PsiDocumentManager, PsiElement}
@@ -57,9 +58,16 @@ class CaretChangeListener extends EditorMouseListener {
             document = editor.getDocument
             caretModel = editor.getCaretModel
             offset = caretModel.getOffset
-            psiElement <- Option(PsiDocumentManager.getInstance(project).getPsiFile(document).findElementAt(offset))
+            documentManager <- Option(PsiDocumentManager.getInstance(project))
+            file <- Option(documentManager.getPsiFile(document))
+            fileViewProvider = file.getViewProvider
+            languages = fileViewProvider.getLanguages.asScala
+            hasScala = languages.exists(l => l.isKindOf("Scala"))
+            psiElement <- Option(file.findElementAt(offset))
         } yield {
             logger.info(s"***CURSOR CLICK***")
+            logger.info(s"${file.getName}: isScala? $hasScala")
+
 
             // this is useful for seeing the grandparent/parent/child of the element I clicked on and seeing which have references
             logFamilyOfElement(psiElement)
