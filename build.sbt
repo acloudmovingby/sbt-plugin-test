@@ -14,11 +14,11 @@ lazy val graphit =
       Global    / intellijAttachSources := true,
       Compile / javacOptions ++= "--release" :: "11" :: Nil,
         intellijPlugins := Seq(
-            //"com.intellij.java".toPlugin,
-            "com.intellij.properties".toPlugin,
-            //s"org.intellij.scala:$scalaPluginVersion".toPlugin
+            //"com.intellij.java".toPlugin, // according to https://github.com/JetBrains/sbt-idea-plugin, this shouldn't be necessary because scala plugin will transitively call it
+//            "com.intellij.properties".toPlugin,
+            s"org.intellij.scala".toPlugin // org.intellij.scala
         ),
       libraryDependencies += "com.eclipsesource.minimal-json" % "minimal-json" % "0.9.5" withSources(),
-      Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
+      Compile / unmanagedResourceDirectories += baseDirectory.value / "src" / "main" / "resources",
       Test / unmanagedResourceDirectories    += baseDirectory.value / "testResources"
     )

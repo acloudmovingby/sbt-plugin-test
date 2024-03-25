@@ -1,4 +1,4 @@
-package org.jetbrains.scala.samples.services
+package org.acloudmovingby.graphit.services
 
 import sys.process._
 

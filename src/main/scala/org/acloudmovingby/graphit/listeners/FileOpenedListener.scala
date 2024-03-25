@@ -1,16 +1,16 @@
 // Copyright 2000-2020 JetBrains s.r.o. and other contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 
-package org.jetbrains.scala.samples.listeners
+package org.acloudmovingby.graphit.listeners
 
 import com.intellij.notification.{Notification, NotificationType, Notifications}
 import com.intellij.openapi.fileEditor.{FileEditorManager, FileEditorManagerEvent, FileEditorManagerListener}
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.{ToolWindow, ToolWindowManager}
-import org.jetbrains.scala.samples.SamplePluginBundle
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.{PsiDocumentManager, PsiFile}
 import com.intellij.ui.components.JBLabel
+import org.acloudmovingby.graphit.SamplePluginBundle
 
 class FileOpenedListener extends FileEditorManagerListener {
 
@@ -23,7 +23,7 @@ class FileOpenedListener extends FileEditorManagerListener {
                 SamplePluginBundle.message("name.getname", file.getName),
                 NotificationType.INFORMATION)
         )
-        logger.info(s"Files: [${source.getOpenFiles.mkString(", ")}]")
+        //logger.info(s"Files: [${source.getOpenFiles.mkString(", ")}]")
     }
 
     override def selectionChanged(event: FileEditorManagerEvent): Unit = {

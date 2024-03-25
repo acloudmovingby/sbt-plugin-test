@@ -8,21 +8,21 @@
 
     <idea-version since-build="231.0"/>
 
-    <!--<depends>org.intellij.scala</depends>-->
+    <depends>org.intellij.scala</depends>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.properties</depends>
 
     <resource-bundle>messages.SamplePluginBundle</resource-bundle>
 
     <actions>
-        <action id="org.jetbrains.scala.samples.actions.PopupDialogAction"
-                class="org.jetbrains.scala.samples.actions.PopupDialogAction">
+        <action id="org.acloudmovingby.graphit.actions.PopupDialogAction"
+                class="org.acloudmovingby.graphit.actions.PopupDialogAction">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
     </actions>
 
     <applicationListeners>
-        <listener class="org.jetbrains.scala.samples.listeners.FileOpenedListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
+        <listener class="org.acloudmovingby.graphit.listeners.FileOpenedListener" topic="com.intellij.openapi.fileEditor.FileEditorManagerListener"/>
     </applicationListeners>
 
     <projectListeners>
@@ -30,16 +30,16 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="My Plugin Notification" />
-        <toolWindow factoryClass="org.jetbrains.scala.samples.ui.MyToolWindowFactory" id="MyToolWindow" anchor="bottom"/>
-        <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
+        <toolWindow factoryClass="org.acloudmovingby.graphit.ui.MyToolWindowFactory" id="MyToolWindow" anchor="bottom"/>
+        <completion.contributor implementationClass="org.acloudmovingby.graphit.completion.SimpleCompletionContributor" language="Properties"/>
     </extensions>
 
     <extensions defaultExtensionNs="com.intellij">
         <notificationGroup displayType="BALLOON" id="Chris Plugin Notification" />
-        <toolWindow factoryClass="org.jetbrains.scala.samples.ui.ChrisToolWindowFactory" id="ChrisFoolWindow" anchor="right"/>
-        <completion.contributor implementationClass="org.jetbrains.scala.samples.completion.SimpleCompletionContributor" language="Properties"/>
-        <projectService id="CatViewerWindowService" serviceImplementation="org.jetbrains.scala.samples.services.CatViewerWindowService"/>
-        <editorFactoryMouseListener implementation="org.jetbrains.scala.samples.listeners.CaretChangeListener"/>
+        <toolWindow factoryClass="org.acloudmovingby.graphit.ui.ChrisToolWindowFactory" id="ChrisFoolWindow" anchor="right"/>
+        <completion.contributor implementationClass="org.acloudmovingby.graphit.completion.SimpleCompletionContributor" language="Properties"/>
+        <projectService id="CatViewerWindowService" serviceImplementation="org.acloudmovingby.graphit.services.CatViewerWindowService"/>
+        <editorFactoryMouseListener implementation="org.acloudmovingby.graphit.listeners.CaretChangeListener"/>
         <!--<lang.findUsagesProvider language="Scala" implementationClass="org.jetbrains.plugins.scala.lang.findUsages.ScalaFindUsagesProvider"/>-->
     </extensions>
 

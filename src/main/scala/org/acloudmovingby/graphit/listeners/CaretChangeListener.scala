@@ -1,11 +1,13 @@
-package org.jetbrains.scala.samples.listeners
+package org.acloudmovingby.graphit.listeners
 
 import com.intellij.lang.Language
+import org.jetbrains.plugins.scala.lang.psi.api.{ScalaFile, ScalaRecursiveElementVisitor}
 
 import scala.jdk.CollectionConverters._
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.event.{EditorMouseEvent, EditorMouseListener}
 import com.intellij.psi.{PsiDocumentManager, PsiElement, PsiFile}
+import org.jetbrains.plugins.scala.lang.psi.api.expr.ScReferenceExpression
 
 class CaretChangeListener extends EditorMouseListener {
 
@@ -53,15 +55,19 @@ class CaretChangeListener extends EditorMouseListener {
         .flatMap(p => Option(p.getReference))
         .flatMap(r => Option(r.resolve()))
 
-    def getScalaPsiFile(file: PsiFile): Option[PsiFile] = for {
+    def getScalaPsiFile(file: PsiFile): Option[ScalaFile] = for {
         fileViewProvider <- Option(file.getViewProvider)
-            languages = fileViewProvider.getLanguages.asScala
-            hasScala = languages.exists(l => l.isKindOf("Scala"))
-        psiTreeForScala <- if (!hasScala) None else {
-            Option(Language.findLanguageByID("Scala"))
-                .flatMap(l => Option(fileViewProvider.getPsi(l)))
+        languages = fileViewProvider.getLanguages.asScala
+        hasScala = languages.exists(l => l.isKindOf("Scala"))
+        scalaLanguage <- Option(Language.findLanguageByID("Scala"))
+        psiFile <- Option(fileViewProvider.getPsi(scalaLanguage))
+        scalaPsiFile <- psiFile match {
+            case scalaFile: ScalaFile => logger.info(s"File is a Scala file!")
+                Some(scalaFile)
+            case _ => logger.info(s"File is not a Scala file, but instead is ${psiFile.getClass.getName}")
+                None
         }
-    } yield psiTreeForScala
+    } yield scalaPsiFile
 
     override def mouseClicked(event: EditorMouseEvent): Unit = {
         for {
@@ -76,7 +82,26 @@ class CaretChangeListener extends EditorMouseListener {
         } yield {
             logger.info(s"***CURSOR CLICK***")
 
-//            val psiTreeForScala = getScalaPsiFile(file)
+            val psiTreeForScala = getScalaPsiFile(file)
+
+            file.accept(new ScalaRecursiveElementVisitor() {
+                override def visitReferenceExpression(ref: ScReferenceExpression): Unit = for {
+                    _ <- Option(super.visitReferenceExpression(ref))
+                    elem <- Option(ref.resolve())
+                    _ = {
+                        logger.info(
+                            s"Reference expression text: ${ref.getText} (elem class: ${elem.getClass.getSimpleName}) at " +
+                                s"${Option(elem.getContainingFile).map(_.getName).getOrElse("")}:${elem.getTextOffset.toString}")
+                    }
+                } yield ()
+            });
+
+            psiTreeForScala.map { scalaPsiFile =>
+                scalaPsiFile.typeDefinitions.foreach { typeDef =>
+                    logger.info(s"Type definition: ${typeDef.getText}")
+                }
+            }
+
 //            logger.info(s"Class of ScalaPsiFile: ${psiTreeForScala.foreach(_.getClass.getName)}")
 
             // this is useful for seeing the grandparent/parent/child of the element I clicked on and seeing which have references

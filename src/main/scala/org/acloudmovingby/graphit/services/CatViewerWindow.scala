@@ -1,4 +1,4 @@
-package org.jetbrains.scala.samples.services
+package org.acloudmovingby.graphit.services
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
