@@ -8,6 +8,7 @@ import org.cef.CefApp
 
 case class CatViewerWindow(project: Project) {
     private lazy val webView: JBCefBrowser = {
+        // TODO add error handling / logging here if JBCefBrowser isn't supported, see: https://plugins.jetbrains.com/docs/intellij/jcef.html#using-jcef-in-a-plugin
         val browser = new JBCefBrowser()
         registerAppSchemeHandler()
         browser.loadURL("http://myapp/index.html")
@@ -25,5 +26,9 @@ case class CatViewerWindow(project: Project) {
                 "myapp",
                 new CustomSchemeHandlerFactory
             )
+    }
+
+    private def setupJSCallback(): Unit = {
+        // JBCefJSQuery
     }
 }

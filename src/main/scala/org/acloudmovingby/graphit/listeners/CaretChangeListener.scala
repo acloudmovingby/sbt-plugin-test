@@ -1,7 +1,7 @@
 package org.acloudmovingby.graphit.listeners
 
 import com.intellij.lang.Language
-import org.jetbrains.plugins.scala.lang.psi.api.{ScalaFile, ScalaRecursiveElementVisitor}
+import org.jetbrains.plugins.scala.lang.psi.api.{ScalaFile, ScalaPsiElement, ScalaRecursiveElementVisitor}
 
 import scala.jdk.CollectionConverters._
 import com.intellij.openapi.diagnostic.Logger
@@ -10,6 +10,8 @@ import com.intellij.psi.{PsiDocumentManager, PsiElement, PsiFile}
 import org.jetbrains.plugins.scala.lang.psi.api.expr.ScReferenceExpression
 
 class CaretChangeListener extends EditorMouseListener {
+
+    private var visitCounter = 0
 
     implicit val logger: Logger = Logger.getFactory.getLoggerInstance(getClass.getName)
 
@@ -81,6 +83,7 @@ class CaretChangeListener extends EditorMouseListener {
             psiElement <- Option(file.findElementAt(offset))
         } yield {
             logger.info(s"***CURSOR CLICK***")
+            visitCounter = 0
 
             val psiTreeForScala = getScalaPsiFile(file)
 
@@ -92,15 +95,31 @@ class CaretChangeListener extends EditorMouseListener {
                         logger.info(
                             s"Reference expression text: ${ref.getText} (elem class: ${elem.getClass.getSimpleName}) at " +
                                 s"${Option(elem.getContainingFile).map(_.getName).getOrElse("")}:${elem.getTextOffset.toString}")
+                        // don't do this I think, it causes some repetition of visits, but I didn't explore it much
+                        //super.visitReferenceExpression(ref)
                     }
-                } yield ()
+                } yield {
+                    visitCounter += 1
+                    logger.info(s"visitCounter = $visitCounter")
+                }
+
+                /** So this one appears to just return the whole element of the file and the counter only goes to 1 (it doesn't recur). I don't get it */
+//                override def visitScalaElement(element: ScalaPsiElement): Unit = {
+//                        logger.info(
+//                            s"Reference expression text: ${element.getText} (elem class: ${element.getClass.getSimpleName}) at " +
+//                                s"${Option(element.getContainingFile).map(_.getName).getOrElse("")}:${element.getTextOffset.toString}")
+//                        //super.visitReferenceExpression(ref)
+//                    visitCounter += 1
+//                    logger.info(s"visitCounter = $visitCounter")
+//                }
             });
 
-            psiTreeForScala.map { scalaPsiFile =>
-                scalaPsiFile.typeDefinitions.foreach { typeDef =>
-                    logger.info(s"Type definition: ${typeDef.getText}")
-                }
-            }
+            /** I think this finds the top level object/class thing in a file?? I don't remember */
+//            psiTreeForScala.map { scalaPsiFile =>
+//                scalaPsiFile.typeDefinitions.foreach { typeDef =>
+//                    logger.info(s"Type definition: ${typeDef.getText}")
+//                }
+//            }
 
 //            logger.info(s"Class of ScalaPsiFile: ${psiTreeForScala.foreach(_.getClass.getName)}")
 
